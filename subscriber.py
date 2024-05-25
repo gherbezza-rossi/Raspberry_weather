@@ -1,6 +1,9 @@
 from paho.mqtt import client as mqtt
 import logging
-from serial1 import light_regulation, rain_regulation, maskOn, maskOff
+from serial_to_arduino import light_regulation, soil1_regulation, soil2_regulation, windows_regulation
+
+root = "weather/"
+
 
 def on_subscribe(client, userdata, mid, reason_code_list, properties):
     if reason_code_list[0].is_failure:
@@ -8,27 +11,26 @@ def on_subscribe(client, userdata, mid, reason_code_list, properties):
     else:
         print("riuscito ", reason_code_list[0])
 
+
 def on_connect(client, userdata, flags, reason_code, properties):
     print("connected ", reason_code)
-    client_mqtt.subscribe("WS/#")
+    client_mqtt.subscribe(root + "#")
+
 
 def on_message(client, userdata, msg):
     topic = msg.topic
     payload = msg.payload.decode()
 
-    print(f"recived: \n\topic: {topic},\tpayload: {payload}")
+    print(f"received: \n\ttopic: {topic},\tpayload: {payload}")
     
-    if topic == "WS/LIGHT":
+    if topic == root + "Light":
         light_regulation(payload)
-    elif topic == "WS/RAINEVENT":
-        rain_regulation(payload)
-    
-    """
-    if msg.payload.decode() == "on":
-        maskOn()
-    else:
-        maskOff()
-    """
+    elif topic == root + "SOILMOISTURE1":
+        soil1_regulation(payload)
+    elif topic == root + "SOILMOISTURE2":
+        soil2_regulation(payload)
+    elif topic == root + "PM25_CH1":
+        windows_regulation(payload)
 
 
 client_mqtt = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
