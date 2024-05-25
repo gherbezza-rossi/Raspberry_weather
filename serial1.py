@@ -10,6 +10,7 @@ def light_regulation(value):
     line = ser.readline().decode('utf-8').rstrip()
     print(line)
 
+
 def rain_regulation(value):
     mes = "RAIN:"+value+"\n"
     ser.write(mes.encode())
