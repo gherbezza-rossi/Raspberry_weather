@@ -4,6 +4,19 @@ import time
 ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 ser.reset_input_buffer()
 
+def light_regulation(value):
+    mes = "LIGHT:"+value+"\n"
+    ser.write(mes.encode())
+    line = ser.readline().decode('utf-8').rstrip()
+    print(line)
+
+def rain_regulation(value):
+    mes = "RAIN:"+value+"\n"
+    ser.write(mes.encode())
+    line = ser.readline().decode('utf-8').rstrip()
+    print(line)
+
+
 def maskOn():
     ser.write(b"on\n")
     line = ser.readline().decode('utf-8').rstrip()

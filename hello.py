@@ -14,7 +14,7 @@ def maskOFF():
 while True:
     arduinoSerialData.write(0)
     
-    if ser.in_waiting > 0:
-        line = ser.readline().decode('utf-8').rstrip()
+    if arduinoSerialData.in_waiting > 0:
+        line = arduinoSerialData.readline().decode('utf-8').rstrip()
         print(line)
 
